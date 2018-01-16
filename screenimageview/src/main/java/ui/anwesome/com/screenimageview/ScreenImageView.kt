@@ -19,9 +19,9 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
         return true
     }
-    data class ScreenImage(var bitmap:Bitmap,var x:Float,var y:Float) {
+    data class ScreenImage(var bitmap:Bitmap) {
         val state = ScreenImageState()
-        fun draw(canvas:Canvas,paint:Paint) {
+        fun draw(canvas:Canvas, paint:Paint, x:Float, y:Float) {
             val w = bitmap.width.toFloat()
             val h = bitmap.height.toFloat()
             paint.strokeWidth = Math.min(w,h)/50
@@ -91,6 +91,25 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             if(animated) {
                 animated = false
             }
+        }
+    }
+    data class ScreenImageRenderer(var view:ScreenImageView,var time:Int = 0) {
+        val animator = ScreenImageAnimator(view)
+        val screenImage = ScreenImage(view.bitmap)
+        fun render(canvas:Canvas,paint:Paint) {
+            val w = canvas.width.toFloat()
+            val h = canvas.height.toFloat()
+            canvas.drawColor(Color.parseColor("#212121"))
+            screenImage.draw(canvas,paint,w/2,h/2)
+            time++
+            animator.animate {
+                screenImage.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            animator.start()
         }
     }
 }
