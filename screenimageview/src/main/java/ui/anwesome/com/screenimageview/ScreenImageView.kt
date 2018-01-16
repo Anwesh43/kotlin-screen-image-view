@@ -3,18 +3,20 @@ package ui.anwesome.com.screenimageview
 /**
  * Created by anweshmishra on 17/01/18.
  */
+import android.app.Activity
 import android.graphics.*
 import android.content.*
 import android.view.*
 class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val renderer = ScreenImageRenderer(this)
     override fun onDraw(canvas:Canvas) {
-
+        renderer.render(canvas,paint)
     }
     override fun onTouchEvent(event:MotionEvent):Boolean {
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -110,6 +112,13 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
         fun handleTap() {
             animator.start()
+        }
+    }
+    companion object {
+        fun create(activity:Activity,bitmap:Bitmap):ScreenImageView {
+            val view = ScreenImageView(activity,bitmap)
+            activity.setContentView(view)
+            return view
         }
     }
 }
