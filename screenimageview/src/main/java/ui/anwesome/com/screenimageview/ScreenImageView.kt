@@ -40,10 +40,12 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             paint.color = Color.WHITE
             for(i in 0..1) {
                 canvas.save()
-                val px = w/10+(w/2-w/10)*state.scale
+                val px = (w/2-w/40)*state.scale
                 val sx = px*(i*2-1)
-                canvas.drawLine(sx,0f,sx-w/10,-w/10,paint)
-                canvas.drawLine(sx,0f,sx-w/10,w/10,paint)
+                canvas.translate(sx,0f)
+                canvas.rotate(180f*i+180*state.scale)
+                canvas.drawLine(0f,0f,-w/20,-w/20,paint)
+                canvas.drawLine(0f,0f,-w/20,w/20,paint)
                 canvas.restore()
             }
             canvas.restore()
@@ -114,7 +116,9 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             }
         }
         fun handleTap() {
-            animator.start()
+            screenImage.startUpdating {
+                animator.start()
+            }
         }
     }
     companion object {
