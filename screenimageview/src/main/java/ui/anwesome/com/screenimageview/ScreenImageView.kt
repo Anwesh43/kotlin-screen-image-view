@@ -20,6 +20,7 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         return true
     }
     data class ScreenImage(var bitmap:Bitmap,var x:Float,var y:Float) {
+        val state = ScreenImageState()
         fun draw(canvas:Canvas,paint:Paint) {
             val w = bitmap.width.toFloat()
             val h = bitmap.height.toFloat()
@@ -29,14 +30,15 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             canvas.translate(x,y)
             canvas.save()
             val path = Path()
-            path.addRect(RectF(-w/2,-h/2,w/2,h/2),Path.Direction.CW)
+            val tw = (w/2)*state.scale
+            path.addRect(RectF(-tw,-h/2,tw,h/2),Path.Direction.CW)
             canvas.clipPath(path)
             canvas.drawBitmap(bitmap,-w/2,-h/2,paint)
             canvas.restore()
             paint.color = Color.WHITE
             for(i in 0..1) {
                 canvas.save()
-                val px = w/10+(w/2-w/10)
+                val px = w/10+(w/2-w/10)*state.scale
                 val sx = px*(i*2-1)
                 canvas.drawLine(sx,0f,sx-w/10,-w/10,paint)
                 canvas.drawLine(sx,0f,sx-w/10,w/10,paint)
@@ -45,10 +47,10 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             canvas.restore()
         }
         fun update(stopcb:(Float) -> Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:() -> Unit) {
-
+            state.startUpdating(startcb)
         }
     }
     data class ScreenImageState(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
