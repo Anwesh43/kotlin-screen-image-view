@@ -101,6 +101,9 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         fun render(canvas:Canvas,paint:Paint) {
             val w = canvas.width.toFloat()
             val h = canvas.height.toFloat()
+            if(time == 0) {
+                screenImage.bitmap = Bitmap.createScaledBitmap(view.bitmap,w.toInt(),w.toInt(),true)
+            }
             canvas.drawColor(Color.parseColor("#212121"))
             screenImage.draw(canvas,paint,w/2,h/2)
             time++
