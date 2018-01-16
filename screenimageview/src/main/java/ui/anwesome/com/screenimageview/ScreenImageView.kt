@@ -40,7 +40,7 @@ class ScreenImageView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             paint.color = Color.WHITE
             for(i in 0..1) {
                 canvas.save()
-                val px = (w/2-w/40)*state.scale
+                val px = w/40+(w/2-w/30)*state.scale
                 val sx = px*(i*2-1)
                 canvas.translate(sx,0f)
                 canvas.rotate(180f*i+180*state.scale)
